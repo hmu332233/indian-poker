@@ -169,6 +169,11 @@ class IndianPoker < Gosu::Window
  
       x_position = [220, WIDTH-220]
       bet_position = [420, WIDTH-420]
+      die_position = [360, WIDTH-360]
+      
+      if @players[index].died
+        @font_2x.draw_rel("다이", die_position[index], 548, 1.0, 0.5, 0.0, 1, 1, 0xff_ff9e1b)
+      end
 
       @font.draw_rel("베팅", bet_position[index], 520, 1.0, 0.5, 0.0)
       if @players[0].died || @players[1].died
@@ -350,11 +355,24 @@ class IndianPoker < Gosu::Window
         @play_turn.died = true
         @betover = true
         pass_turn
-      elsif get_your_total_bet > (get_my_total_bet + bet_money.to_i) 
-        #이런일이 발생하면 안된다. # 배팅액은 맞춰야 한다
-        @bet_violation_cnt += 1
       elsif bet_money.to_i == 0
         #이런일이 발생하면 안된다. # 0원 배팅은 없다.
+        puts "0개 배팅은 없음. #{bet_money}개를 배팅함."
+        @bet_violation_cnt += 1
+      elsif get_your_total_bet > (get_my_total_bet + bet_money.to_i)
+        if @play_turn.money - bet_money.to_i <= 0
+          @betover = true
+          @bet_money_history << bet_money.to_i
+          @play_turn.money -= bet_money.to_i if bet_money.to_i > 0
+          pass_turn
+        else
+          #이런일이 발생하면 안된다. # 배팅액은 맞춰야 한다
+          puts "배팅액은 맞춰야 함. #{bet_money}개를 배팅함."
+          @bet_violation_cnt += 1
+        end
+      elsif bet_money.to_i > @play_turn.money
+        # 가진 돈 보다 더 많이 배팅하면 안된다.
+        puts "가진 돈 보다 더 많이 배팅하면 안됨. #{bet_money}개를 배팅함."
         @bet_violation_cnt += 1
       else
         if get_your_total_bet == (get_my_total_bet + bet_money.to_i) || @play_turn.money <= 0 || @play_next.money <= 0
