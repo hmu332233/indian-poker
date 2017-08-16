@@ -172,7 +172,7 @@ class IndianPoker < Gosu::Window
       die_position = [360, WIDTH-360]
       
       if @players[index].died
-        @font_2x.draw_rel("다이", die_position[index], 548, 1.0, 0.5, 0.0, 1, 1, 0xff_ff9e1b)
+        @font_2x.draw_rel("DIE", die_position[index], 548, 1.0, 0.5, 0.0, 1, 1, 0xff_ff9e1b)
       end
 
       @font.draw_rel("베팅", bet_position[index], 520, 1.0, 0.5, 0.0)
@@ -195,7 +195,7 @@ class IndianPoker < Gosu::Window
           @font_2x.draw_rel("◀　#{@current_bet_money}　▶", bet_position[index], 601, 1.0, 0.5, 0.0)
 
           @font.draw_rel("C - 콜", 160 + @font.text_width("R - 새로 시작하기") + @font.text_width("P - 턴 넘기기"), 630, 1.0, 0.0, 0.0)
-          @font.draw_rel("F - 폴드", 160 + @font.text_width("R - 새로 시작하기") + @font.text_width("P - 턴 넘기기"), 650, 1.0, 0.0, 0.0)
+          @font.draw_rel("D - 다이", 160 + @font.text_width("R - 새로 시작하기") + @font.text_width("P - 턴 넘기기"), 650, 1.0, 0.0, 0.0)
           @font.draw_rel("N - 레이즈", 160 + @font.text_width("R - 새로 시작하기") + @font.text_width("P - 턴 넘기기"), 670, 1.0, 0.0, 0.0)
         else
           @font.draw_rel("N - 다음 턴 연산하기", 160 + @font.text_width("R - 새로 시작하기") + @font.text_width("P - 턴 넘기기"), 670, 1.0, 0.0, 0.0)
@@ -412,7 +412,7 @@ class IndianPoker < Gosu::Window
         @current_bet_money = get_your_total_bet - get_my_total_bet
       end
       calculate
-    when Gosu::KbF
+    when Gosu::KbD
       @current_bet_money = 0 - BET_UNIT
       calculate
     end 
